@@ -1,0 +1,44 @@
+services:
+  app:
+    container_name: filestash
+    image: filestash:latest
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    restart: always
+    environment:
+    - APPLICATION_URL=files.kamc.duckdns.org
+    - CANARY=true
+    - OFFICE_URL=http://collabora:9980
+    - OFFICE_FILESTASH_URL=https://files.kamc.duckdns.org
+    - OFFICE_REWRITE_URL=https://office.kamc.duckdns.org
+    #ports:
+    #- "8334:8334"
+    volumes:
+    - filestash:/app/data/state/
+    networks:
+      - reverse-proxy
+
+  # wopi_server:
+  #   container_name: filestash_wopi
+  #   image: collabora/code:24.04.10.2.1
+  #   restart: always
+  #   environment:
+  #   - "extra_params=--o:ssl.enable=false"
+  #   - aliasgroup1="https://.*:443"
+  #   command:
+  #   - /bin/bash
+  #   - -c
+  #   - |
+  #        curl -o /usr/share/coolwsd/browser/dist/branding-desktop.css https://gist.githubusercontent.com/mickael-kerjean/bc1f57cd312cf04731d30185cc4e7ba2/raw/d706dcdf23c21441e5af289d871b33defc2770ea/destop.css
+  #        /bin/su -s /bin/bash -c '/start-collabora-online.sh' cool
+  #   user: root
+  #   #ports:
+  #   #- "9980:9980"
+  #   networks:
+  #     - reverse-proxy
+networks:
+  reverse-proxy:
+    external: true
+volumes:
+  filestash:
