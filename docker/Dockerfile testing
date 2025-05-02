@@ -7,7 +7,7 @@ WORKDIR /home/
 COPY ../ /home/filestash
 
 # STEP2: BUILD FRONTEND
-FROM node:18-alpine AS builder_frontend
+FROM node:slim AS builder_frontend
 WORKDIR /home/filestash/
 COPY --from=builder_prepare /home/filestash .
 RUN apk add make git gzip brotli && \
@@ -16,7 +16,7 @@ RUN apk add make git gzip brotli && \
     cd public && make compress
 
 # STEP3: BUILD BACKEND
-FROM golang:1.23-bookworm AS builder_backend
+FROM golang:1.24-bookworm AS builder_backend
 WORKDIR /home/filestash/
 COPY --from=builder_frontend /home/filestash/ .
 RUN apt-get update > /dev/null && \

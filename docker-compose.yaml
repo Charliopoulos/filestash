@@ -1,0 +1,25 @@
+services:
+  app:
+    container_name: filestash
+    image: filestash:test
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    restart: always
+    environment:
+    - APPLICATION_URL=files.kamc.duckdns.org
+    - CANARY=true
+    - OFFICE_URL=http://collabora:9980
+    - OFFICE_FILESTASH_URL=https://files.kamc.duckdns.org
+    - OFFICE_REWRITE_URL=https://office.kamc.duckdns.org
+    #ports:
+    #- "8334:8334"
+    volumes:
+    - filestash_data:/app/data/state/
+    networks:
+      - reverse-proxy
+networks:
+  reverse-proxy:
+    external: true
+volumes:
+  filestash_data:
